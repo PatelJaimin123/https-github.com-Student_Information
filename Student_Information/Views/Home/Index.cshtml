@@ -1,0 +1,231 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/CSS/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/CSS/buttons.dataTables.min.css" rel="stylesheet" />
+    <link href="~/Content/CSS/dataTables.bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/CSS/dataTables.bootstrap.min.css" rel="stylesheet" />
+    <script src="~/Scripts/JS/bootstrap.min.js"></script>
+    <script src="~/Scripts/JS/buttons.html5.min.js"></script>
+    <script src="~/Scripts/JS/dataTables.bootstrap.min.js"></script>
+    <script src="~/Scripts/JS/dataTables.buttons.min.js"></script>
+    <script src="~/Scripts/JS/jquery-3.3.1.js"></script>
+    <script src="~/Scripts/JS/jquery.dataTables.min.js"></script>
+    <script src="~/Scripts/JS/jquery.min.js"></script>
+    <script src="~/Scripts/JS/pdfmake.min.js"></script>
+    <script src="~/Scripts/JS/vfs_fonts.js"></script>
+
+    <style>
+        div#example_wrapper {
+            margin-top: 179px;
+        }
+
+        a.navbar-brand {
+            padding-left: 480px;
+        }
+
+        button.btn.btn-primary {
+            margin-top: 119px;
+            float: right;
+            margin-right: 15px;
+        }
+
+        hr {
+            width: 85%;
+        }
+
+        p {
+            margin: 0 100px 10px;
+        }
+
+        a#pdf {
+            float: left;
+            width: 138px;
+            margin-top: 118px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog modal-sm">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Add Information</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form id="Myform">
+                            <label>First Name</label>
+                            <input type="text" id="txtFirstName" class="form-control" placeholder="Enter First Name">
+                            <br />
+                            <label>Middle Name</label>
+                            <input type="text" id="txtMiddleName" class="form-control" placeholder="Enter Middle Name">
+                            <br />
+                            <label>Last Name</label>
+                            <input type="text" id="txtLaststName" class="form-control" placeholder="Enter Last Name">
+                            <br />
+                            <label>Company Name</label>
+                            <input type="text" id="txtCompanyName" class="form-control" placeholder="Enter Company Name">
+                            <br />
+                            <label>Address</label>
+                            <textarea type="text" id="txtAddress" class="form-control" placeholder="Enter Address"></textarea>
+                            <br />
+                            <label>Contect No</label>
+                            <input type="number" id="txtContectNo" class="form-control" placeholder="Contect No">
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" onclick="resetForm();">Close</button>
+                        <button class="btn btn-success" type="button" onclick="Insert();">ADD</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <a class="btn btn-primary" id="pdf" href="~/Home/PrintPDF/">PDF</a>
+        <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#myModal">+ ADD Information</button>
+        <table id="example" class="table table-striped table-bordered" style="width:100%">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>First Name</th>
+                    <th>Middle Name</th>
+                    <th>Last Name</th>
+                    <th>Address</th>
+                    <th>Company Name</th>
+                    <th>Contect No</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</body>
+</html>
+<script>
+    function resetForm() {
+        document.getElementById("Myform").reset();
+    }
+
+
+    $(document).ready(function () {
+        $('#example').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'pdfHtml5',
+                    orientation: 'landscape',
+                    pageSize: 'LEGAL'
+                }
+            ],
+            "ajax": {
+                "url": "/Home/GetList",
+                "type": "GET",
+                "datatype": "json"
+            },
+            "columns": [
+                { "data": "ID" },
+                { "data": "FirstName" },
+                { "data": "MiddleName" },
+                { "data": "LastName" },
+                { "data": "Address" },
+                { "data": "CompanyName" },
+                { "data": "ContectNo" },
+            ]
+        });
+    });
+
+
+
+
+
+    //$(document).ready(function () {
+    //    var table = $('#example').DataTable({
+            
+    //    });
+    //});
+
+    function Insert() {
+        debugger
+       
+        var isValid = true;
+        if ($('#txtFirstName').val().trim() == "") {
+            $('#txtFirstName').css('border-color', 'Red');
+            isValid = false;
+        }
+        else {
+            $('#txtFirstName').css('border-color', 'lightgrey');
+        }
+        if ($('#txtMiddleName').val().trim() == "") {
+            $('#txtMiddleName').css('border-color', 'Red');
+            isValid = false;
+        }
+        else {
+            $('#txtMiddleName').css('border-color', 'lightgrey');
+        }
+
+        if ($('#txtLaststName').val().trim() == "") {
+            $('#txtLaststName').css('border-color', 'Red');
+            isValid = false;
+        }
+        else {
+            $('#txtLaststName').css('border-color', 'lightgrey');
+        }
+
+        if ($('#txtCompanyName').val().trim() == "") {
+            $('#txtCompanyName').css('border-color', 'Red');
+            isValid = false;
+        }
+        else {
+            $('#txtCompanyName').css('border-color', 'lightgrey');
+        }
+
+        if ($('#txtAddress').val().trim() == "") {
+            $('#txtAddress').css('border-color', 'Red');
+            isValid = false;
+        }
+        else {
+            $('#txtAddress').css('border-color', 'lightgrey');
+        }
+
+        if ($('#txtContectNo').val().trim() == "") {
+            $('#txtContectNo').css('border-color', 'Red');
+            isValid = false;
+        }
+        else {
+            $('#txtContectNo').css('border-color', 'lightgrey');
+        }
+        if (!isValid) {
+            return;
+        }
+
+        var mydata = new Object();
+        mydata.FirstName = ($("#txtFirstName").val());
+        mydata.MiddleName = ($("#txtMiddleName").val());
+        mydata.LastName = ($("#txtLaststName").val());
+        mydata.Address = ($("#txtCompanyName").val());
+        mydata.CompanyName = ($("#txtAddress").val());
+        mydata.ContectNo = ($("#txtContectNo").val());
+
+
+        $.ajax({
+            url: "/Home/Insert",
+            type: 'POST',
+            data: mydata,
+            success: function (result) {
+                debugger
+                if (result) {
+                    $("#myModal").hide();
+                    location.reload();
+                }
+                else {
+                    alert("Error");
+                }
+            }
+        });
+    }
+
+</script>
